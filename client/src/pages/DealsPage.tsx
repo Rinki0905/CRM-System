@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../app/store';
 import PageHeader from '../components/layout/PageHeader';
 import AddDealModal from '../components/deals/AddDealModal.tsx';
 import { DndContext, type DragEndEvent, closestCorners } from '@dnd-kit/core';
-import { SortableContext, horizontalListSortingStrategy } from '@dnd-kit/sortable';
 import Column from '../components/deals/Column.tsx'; 
 
 export interface Deal {
@@ -22,7 +21,6 @@ const dealStages = ['Lead', 'Contacted', 'Proposal', 'Won', 'Lost'];
 const DealsPage = () => {
   const { user } = useSelector((state: RootState) => state.auth);
   const [deals, setDeals] = useState<Deal[]>([]);
-  const [columns, setColumns] = useState<Columns>({});
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
 

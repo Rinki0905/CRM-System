@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom'; 
 import axios from 'axios';
 import { useSelector } from 'react-redux';
@@ -17,7 +17,7 @@ const DashboardPage = () => {
   const location = useLocation();
   const [stats, setStats] = useState({ totalCustomers: 0, activeDeals: 0, totalRevenue: 0, conversionRate: 0 });
   const [recentCustomers, setRecentCustomers] = useState<any[]>([]);
-  const [upcomingTasks, setUpcomingTasks] = useState<any[]>([]);
+  const [upcomingTasks] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
