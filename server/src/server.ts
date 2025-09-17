@@ -20,14 +20,17 @@ connectDB();
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: process.env.CORS_ORIGIN, // Allow requests from our live frontend
+  credentials: true
+}));
 app.use(express.json());
 
 // API Routes Setup
 app.use('/api/auth', authRoutes);
 app.use('/api/customers', customerRoutes);
 app.use('/api/deals', dealRoutes);
-app.use('/api/tasks', taskRoutes); // This line activates all your task routes
+app.use('/api/tasks', taskRoutes); 
 app.use('/api/chatbot', chatbotRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/analytics', analyticsRoutes);
