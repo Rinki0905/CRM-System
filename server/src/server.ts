@@ -20,10 +20,7 @@ connectDB();
 const app = express();
 
 // Middleware
-app.use(cors({
-  origin: process.env.CORS_ORIGIN, // Allow requests from our live frontend
-  credentials: true
-}));
+app.use(cors());
 app.use(express.json());
 
 // API Routes Setup

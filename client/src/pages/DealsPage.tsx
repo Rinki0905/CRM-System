@@ -1,9 +1,8 @@
-import  { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../app/store';
-import PageHeader from '../components/layout/PageHeader';
-import AddDealModal from '../components/deals/AddDealModal.tsx';
+import AddDealModal from '../components/deals/AddDealModal';
 import { DndContext, type DragEndEvent, closestCorners } from '@dnd-kit/core';
 import Column from '../components/deals/Column.tsx'; 
 
@@ -49,6 +48,7 @@ const DealsPage = () => {
     const newStage = over.id as string;
 
     if (originalStage !== newStage) {
+      // Optimistic UI update
       setDeals(prevDeals => {
         const activeDealIndex = prevDeals.findIndex(d => d._id === active.id);
         if (activeDealIndex === -1) return prevDeals;
@@ -56,11 +56,12 @@ const DealsPage = () => {
         updatedDeals[activeDealIndex] = { ...updatedDeals[activeDealIndex], stage: newStage };
         return updatedDeals;
       });
+      // API call
       const config = { headers: { Authorization: `Bearer ${user?.token}` } };
       axios.put(`${import.meta.env.VITE_API_URL}/deals/${active.id}`, { stage: newStage }, config)
         .catch(err => {
           console.error("Failed to update deal stage", err);
-
+          // Revert on failure
           setDeals(prevDeals => {
             const activeDealIndex = prevDeals.findIndex(d => d._id === active.id);
             if (activeDealIndex === -1) return prevDeals;
@@ -76,8 +77,6 @@ const DealsPage = () => {
 
   return (
     <>
-      <PageHeader title="Deals" subtitle="Track your sales pipeline and manage deal progress" />
-      
       {deals.length === 0 ? (
         <div className="text-center py-20">
           <div className="text-5xl mb-4">🤝</div>
@@ -89,14 +88,14 @@ const DealsPage = () => {
         </div>
       ) : (
         <>
-          <div className="flex justify-between items-center mb-4">
+          <div className="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
             <h2 className="text-xl font-semibold">All Deals</h2>
-            <button onClick={() => setIsModalOpen(true)} className="bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg hover:bg-blue-700">
+            <button onClick={() => setIsModalOpen(true)} className="bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg hover:bg-blue-700 w-full md:w-auto">
               + Add Deal
             </button>
           </div>
           <DndContext onDragEnd={handleDragEnd} collisionDetection={closestCorners}>
-            <div className="grid grid-cols-5 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-5">
               {dealStages.map(stage => (
                 <Column 
                   key={stage} 

@@ -22,11 +22,12 @@ const SortableDealCard: React.FC<SortableDealCardProps> = ({ deal }) => {
     transition,
     opacity: isDragging ? 0.5 : 1,
   };
-
+  
   return (
-    <div ref={setNodeRef} style={style} {...attributes} {...listeners} className="bg-white p-4 rounded-md shadow-sm border cursor-grab">
-      <p className="font-semibold text-sm">{deal.title}</p>
-       <p className="text-xs text-gray-500">
+    <div ref={setNodeRef} style={style} {...attributes} {...listeners} className="bg-white p-4 rounded-md shadow-sm border cursor-grab relative">
+        
+      <p className="font-semibold text-sm pr-6">{deal.title}</p>
+      <p className="text-xs text-gray-500">
         {deal.customer?.name || 'No Customer Assigned'}
       </p>
       <p className="text-sm font-bold mt-2">${deal.value.toLocaleString()}</p>

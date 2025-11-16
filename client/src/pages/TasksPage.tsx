@@ -1,8 +1,7 @@
-import  { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../app/store';
-import PageHeader from '../components/layout/PageHeader';
 import AddTaskModal from '../components/tasks/AddTaskModal';
 
 interface Task {
@@ -42,6 +41,19 @@ const TasksPage = () => {
     } catch (error) { console.error('Failed to update task', error); }
   };
   
+  const handleDeleteTask = async (taskId: string) => {
+    if (window.confirm('Are you sure you want to delete this task?')) {
+      try {
+        const config = { headers: { Authorization: `Bearer ${user?.token}` } };
+        await axios.delete(`${import.meta.env.VITE_API_URL}/tasks/${taskId}`, config);
+        setTasks(prevTasks => prevTasks.filter(task => task._id !== taskId));
+      } catch (error) {
+        console.error('Failed to delete task', error);
+        alert('Failed to delete task.');
+      }
+    }
+  };
+
   const filteredTasks = useMemo(() => {
     if (filter === 'Pending') return tasks.filter(task => !task.isCompleted);
     if (filter === 'Completed') return tasks.filter(task => task.isCompleted);
@@ -73,7 +85,14 @@ const TasksPage = () => {
                 <p className="text-sm text-gray-500">Due: {new Date(task.dueDate).toLocaleDateString()}</p>
               </div>
             </div>
-            {}
+            <button 
+              onClick={() => handleDeleteTask(task._id)}
+              className="p-2 text-gray-400 hover:text-red-600 rounded-full"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </button>
           </li>
         ))}
       </ul>
@@ -82,17 +101,27 @@ const TasksPage = () => {
   
   return (
     <>
-      <PageHeader title="Tasks" subtitle="Manage your tasks, deadlines, and follow-ups" />
-      <div className="flex justify-between items-center mb-6">
-        <div>
-          <span className="font-semibold mr-4">All Tasks</span>
+      
+      <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+        <div className="flex flex-wrap gap-2">
           {['All', 'Pending', 'Completed'].map((status) => (
-            <button key={status} onClick={() => setFilter(status as FilterStatus)} className={`px-4 py-1 rounded-full text-sm font-semibold ${filter === status ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'}`}>
+            <button 
+              key={status} 
+              onClick={() => setFilter(status as FilterStatus)} 
+              className={`px-4 py-1 rounded-full text-sm font-semibold ${
+                filter === status 
+                  ? 'bg-blue-600 text-white' 
+                  : 'bg-gray-200 text-gray-700'
+              }`}
+            >
               {status}
             </button>
           ))}
         </div>
-        <button onClick={() => setIsModalOpen(true)} className="bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg hover:bg-blue-700">
+        <button 
+          onClick={() => setIsModalOpen(true)} 
+          className="bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg hover:bg-blue-700 w-full md:w-auto"
+        >
           + Add Task
         </button>
       </div>

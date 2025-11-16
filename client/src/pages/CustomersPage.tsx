@@ -1,8 +1,7 @@
-import  { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../app/store';
-import PageHeader from '../components/layout/PageHeader';
 import AddCustomerModal from '../components/customers/AddCustomerModal';
 
 interface Customer {
@@ -59,24 +58,22 @@ const CustomersPage = () => {
 
   return (
     <>
-      <PageHeader title="Customers" subtitle="Manage your customer relationships and contact information" />
       
       <div className="bg-white p-6 rounded-lg shadow-sm">
-        <div className="flex justify-between items-center mb-4">
+        <div className="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
           <input 
             type="search" 
             placeholder="Search customers..." 
-            className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-1/3"
+            className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full md:w-1/3"
             onChange={(e) => setSearchTerm(e.target.value)}
           />
           <button 
             onClick={() => setIsModalOpen(true)}
-            className="bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg hover:bg-blue-700"
+            className="bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg hover:bg-blue-700 w-full md:w-auto"
           >
             + Add Customer
           </button>
         </div>
-        
         <div className="overflow-x-auto">
           <table className="min-w-full bg-white">
             <thead className="bg-gray-50">
@@ -98,8 +95,6 @@ const CustomersPage = () => {
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{customer.company || 'N/A'}</td>
                     <td className="px-6 py-4 whitespace-nowrap"><span className="text-xs font-semibold text-green-600 bg-green-100 px-2 py-1 rounded-full">Active</span></td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{new Date(customer.createdAt).toLocaleDateString()}</td>
-                    
-                    {}
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                       <button className="text-indigo-600 hover:text-indigo-900 mr-4">Edit</button>
                       <button 

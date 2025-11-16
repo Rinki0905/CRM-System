@@ -18,7 +18,12 @@ const Column: React.FC<ColumnProps> = ({ id, title, deals }) => {
       <h3 className="font-semibold mb-4">{title} ({deals.length})</h3>
       <SortableContext id={id} items={deals.map(d => d._id)} strategy={verticalListSortingStrategy}>
         <div ref={setNodeRef} className="space-y-3 min-h-[400px]">
-          {deals.map(deal => <SortableDealCard key={deal._id} deal={deal} />)}
+          {deals.map(deal => (
+            <SortableDealCard 
+              key={deal._id} 
+              deal={deal} 
+            />
+          ))}
         </div>
       </SortableContext>
     </div>
